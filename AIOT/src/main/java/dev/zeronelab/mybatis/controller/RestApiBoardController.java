@@ -24,7 +24,7 @@ import dev.zeronelab.mybatis.vo.SearchCriteria;
 import dev.zeronelab.mybatis.vo.nBoardVO;
 
 @RestController
-@RequestMapping("/api/nBoard")
+@RequestMapping("/api/nBoards")
 public class RestApiBoardController {
 
 	private static final Logger logger = LoggerFactory.getLogger(RestApiBoardController.class);
@@ -34,7 +34,7 @@ public class RestApiBoardController {
 
 	// 게시글 페이지 리스트
 	@RequestMapping(value = "/list/{page}", method = RequestMethod.GET)
-	public ResponseEntity<Map<String, Object>> boardListPage(@PathVariable("page") Integer page,
+	public ResponseEntity<Map<String, Object>> selectListPage(@PathVariable("page") Integer page,
 			@ModelAttribute(value = "cri") SearchCriteria cri) {
 		ResponseEntity<Map<String, Object>> entity = null;
 
@@ -125,7 +125,7 @@ public class RestApiBoardController {
 
 	// 게시글 수정
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
-	public String modify(@RequestBody Map<String, Object> requestBody) throws Exception {
+	public String updateNboard(@RequestBody Map<String, Object> requestBody) throws Exception {
 		logger.info("modifyPagingpost...........");
 
 		// 클라이언트가 보낸 요청 본문에서 게시물 번호, 제목, 내용을 추출
@@ -167,7 +167,7 @@ public class RestApiBoardController {
 	}
 
 	// 게시글 삭제
-	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	@RequestMapping(value = "/remove", method = RequestMethod.POST)
 	public String delete(@RequestBody Map<String, Integer> request) throws Exception {
 		logger.info("delete post ...........");
 		int bNo = request.get("bNo");

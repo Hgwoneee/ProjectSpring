@@ -14,7 +14,7 @@
 
 
 	<!-- 차량정보 조회 -->
-	<select id="read" resultType="dev.zeronelab.mybatis.vo.CarVO">
+	<select id="selectMemId" resultType="dev.zeronelab.mybatis.vo.CarVO">
 
 		select *
 		from CarRegi

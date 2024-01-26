@@ -14,7 +14,7 @@
 
 
 	<!-- memNo로 회원정보 조회 -->
-	<select id="read" resultType="dev.zeronelab.mybatis.vo.Member">
+	<select id="selectMNo" resultType="dev.zeronelab.mybatis.vo.Member">
 
 		select *
 		from member
@@ -90,7 +90,7 @@
 
 
 	<!-- 마이페이지 회원정보 조회 -->
-	<select id="readMember" resultType="dev.zeronelab.mybatis.vo.Member">
+	<select id="selectMemId" resultType="dev.zeronelab.mybatis.vo.Member">
 
 		select memId, memNickName, memName,
 		memPw, regdate
@@ -101,7 +101,7 @@
 
 
 	<!-- 마이페이지 회원정보 수정 -->
-	<update id="modifyMember">
+	<update id="update">
 
 		update member set memName = #{memName}, memNickName = #{memNickName}, memPw = #{memPw}
 		where memId = #{memId}

@@ -1,3 +1,12 @@
-참고: https://needjarvis.tistory.com/771
+src/main/resources/mybatis/sql/ddl.sql 참고하여 데이터 스키마 생성할 것.
 
-1) src/main/resources/mybatis/sql/ddl.sql 참고하여 데이터 스키마 생성할 것.
+## ⚡어디야?
+
+### 개발기간 ㅣ 2023.09~2024.02
+### 개발인원 | 9명 (react 3명 / Django 3명 / Spring 3명)
+
+- **REST API를 활용한 전기차 충전소 안내 웹사이트**
+- 가까운 전기차 `충전소 위치`와 충전소에 구비되어 있는 `충전타입 종류`,  `실시간 정보`,  `주차장 요금 정보`제공
+- 개인 차량 충전 타입에 맞는 `충전소 위치 검색`
+- 사용자 간 정보 공유를 할 수 있는 커뮤니티 장 제공
+- 1, 2차 Spring Legacy / 3차 Spring Boot / 4차 Spring JPA, Security 활용

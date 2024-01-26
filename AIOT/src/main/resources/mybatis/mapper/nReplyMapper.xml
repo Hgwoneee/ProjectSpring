@@ -13,7 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 	<!-- 댓글 리스트 -->
-	<select id="list" resultType="dev.zeronelab.mybatis.vo.nReplyVO">
+	<select id="select" resultType="dev.zeronelab.mybatis.vo.nReplyVO">
 		SELECT *
 		FROM nReply
 		WHERE bNo =
@@ -23,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 	<!-- 댓글 수정 -->
-	<update id="modify">
+	<update id="update">
 	<![CDATA[
 		UPDATE nReply
 	SET replyText = #{replyText},
@@ -34,7 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 	<!-- 댓글 삭제 -->
-	<delete id="remove">
+	<delete id="delete">
 		<![CDATA[
 		DELETE FROM nReply
 		WHERE rNo = #{rNo}

@@ -22,7 +22,7 @@ import dev.zeronelab.mybatis.vo.PageMaker;
 import dev.zeronelab.mybatis.vo.nReplyVO;
 
 @RestController
-@RequestMapping("/api/nreply")
+@RequestMapping("/api/nreplys")
 public class RestApiReplyController {
 
 	private static final Logger logger = LoggerFactory.getLogger(RestApiBoardController.class);
@@ -35,7 +35,7 @@ public class RestApiReplyController {
 
 	// 댓글 등록
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public ResponseEntity<String> register(@RequestBody Map<String, Object> requestBody) {
+	public ResponseEntity<String> insertNReply(@RequestBody Map<String, Object> requestBody) {
 		logger.info("............ADD post ...........");
 		String bNo = (String) requestBody.get("bNo");
 		String replyText = (String) requestBody.get("replyText");
@@ -54,11 +54,11 @@ public class RestApiReplyController {
 
 	// 댓글 리스트
 	@RequestMapping(value = "/list/{bNo}", method = RequestMethod.GET)
-	public ResponseEntity<List<nReplyVO>> list(@PathVariable("bNo") Integer bNo) {
+	public ResponseEntity<List<nReplyVO>> selectList(@PathVariable("bNo") Integer bNo) {
 
 		ResponseEntity<List<nReplyVO>> entity = null;
 		try {
-			entity = new ResponseEntity<>(mapper.list(bNo), HttpStatus.OK);
+			entity = new ResponseEntity<>(mapper.select(bNo), HttpStatus.OK);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -75,7 +75,7 @@ public class RestApiReplyController {
 		ResponseEntity<String> entity = null;
 		try {
 			vo.setRNo(rNo);
-			mapper.modify(vo);
+			mapper.update(vo);
 
 			entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
 		} catch (Exception e) {
@@ -87,11 +87,11 @@ public class RestApiReplyController {
 
 	// 댓글 삭제
 	@RequestMapping(value = "/{rNo}/{bNo}", method = RequestMethod.DELETE)
-	public ResponseEntity<String> remove(@PathVariable("rNo") Integer rNo, @PathVariable("bNo") String bNo)
+	public ResponseEntity<String> delete(@PathVariable("rNo") Integer rNo, @PathVariable("bNo") String bNo)
 			throws Exception {
 		ResponseEntity<String> entity = null;
 		try {
-			mapper.remove(rNo);
+			mapper.delete(rNo);
 			Mapper.updateReplyCnt(bNo, -1);
 			entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
 		} catch (Exception e) {
@@ -103,7 +103,7 @@ public class RestApiReplyController {
 
 	// 댓글 페이지
 	@RequestMapping(value = "/{bNo}/{page}", method = RequestMethod.GET)
-	public ResponseEntity<Map<String, Object>> listPage(@PathVariable("bNo") Integer bNo,
+	public ResponseEntity<Map<String, Object>> selectListPage(@PathVariable("bNo") Integer bNo,
 			@PathVariable("page") Integer page) {
 
 		ResponseEntity<Map<String, Object>> entity = null;

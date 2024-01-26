@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,7 +27,7 @@ import util.JwtUtils;
 import util.PasswordEncoder;
 
 @RestController
-@RequestMapping("/api/member")
+@RequestMapping("/api/members")
 public class RestApiMemberController {
 
 	private static final Logger logger = LoggerFactory.getLogger(RestApiMemberController.class);
@@ -42,8 +41,8 @@ public class RestApiMemberController {
 
 	// 회원리스트
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public List<Member> memberdList(Model model) throws Exception {
-		logger.info("// /member/list");
+	public List<Member> memberList(Model model) throws Exception {
+		logger.info("...........// /member/list............");
 
 		List<Member> list = membermapper.selectMemberList();
 
@@ -53,19 +52,19 @@ public class RestApiMemberController {
 	}
 
 	// mNo로 회원정보 조회
-	@RequestMapping(value = "/read", method = RequestMethod.POST)
-	public Member read(@RequestBody Member mem) throws Exception {
-		logger.info("read post ...........");
+	@RequestMapping(value = "/readMNo", method = RequestMethod.POST)
+	public Member selectMNo(@RequestBody Member mem) throws Exception {
+		logger.info(".............read post ...........");
 		logger.info(mem.toString());
 
-		return membermapper.read(mem.getMemNo());
+		return membermapper.selectMNo(mem.getMemNo());
 	}
 
 	/// 회원가입
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public String registPOST(@RequestBody Member mem) throws Exception {
+	public String insertPOST(@RequestBody Member mem) throws Exception {
 
-		logger.info("regist post ...........");
+		logger.info("............regist post ...........");
 		logger.info(mem.toString());
 
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -83,12 +82,12 @@ public class RestApiMemberController {
 	@RequestMapping(value = "/loginPost", method = RequestMethod.POST)
 	public Member loginPOST(@RequestBody LoginDTO dto) throws Exception {
 
-		logger.info("// /loginPost");
+		logger.info(".....// /loginPost.....");
 		logger.info(dto.toString());
 		final String token = jwtUtils.generateToken(dto.getMemId());
 		System.out.println("/*** encordingStr=" + token);
 
-		String decordedStr = jwtUtils.getEmailFromToken(token);
+		String decordedStr = jwtUtils.getMemIdFromToken(token);
 		System.out.println("/*** decordingStr=" + decordedStr);
 
 		boolean memId = jwtUtils.validateToken(token, dto.getMemId());
@@ -115,12 +114,12 @@ public class RestApiMemberController {
 	@RequestMapping(value = "/loginCookie", method = RequestMethod.POST)
 	public Member loginCookie(@RequestBody LoginDTO dto) throws Exception {
 
-		logger.info("/*** /loginCookie 시작...");
+		logger.info(".../*** /loginCookie 시작...");
 		logger.info(dto.toString());
 		final String token = jwtUtils.generateToken(dto.getMemId());
 		System.out.println("/*** encordingStr=" + token);
 
-		String decordedStr = jwtUtils.getEmailFromToken(token);
+		String decordedStr = jwtUtils.getMemIdFromToken(token);
 		System.out.println("/*** decordingStr=" + decordedStr);
 
 		boolean email = jwtUtils.validateToken(token, dto.getMemId());
@@ -176,7 +175,7 @@ public class RestApiMemberController {
 	// 이메일 중복체크
 	@RequestMapping(value = "/emailCk", method = RequestMethod.POST)
 	public Member eamilCk(@RequestBody Member mem) throws Exception {
-		logger.info("emailCk post ...........");
+		logger.info(".............emailCk post ...........");
 		logger.info(mem.toString());
 
 		return membermapper.emailCk(mem.getMemId());
@@ -185,7 +184,7 @@ public class RestApiMemberController {
 	// 이메일로 mid 체크
 	@RequestMapping(value = "/midCk", method = RequestMethod.POST)
 	public Member midCk(@RequestBody Member mem) throws Exception {
-		logger.info("midCk post ...........");
+		logger.info("..............midCk post ...........");
 		logger.info(mem.toString());
 
 		return membermapper.midCk(mem.getMemId());
@@ -195,25 +194,25 @@ public class RestApiMemberController {
 	// 닉네임 중복체크
 	@RequestMapping(value = "/ninameCk", method = RequestMethod.POST)
 	public Member ninameCk(@RequestBody Member mem) throws Exception {
-		logger.info("ninameCk post ...........");
+		logger.info("..............ninameCk post ...........");
 		logger.info(mem.toString());
 
 		return membermapper.ninameCk(mem.getMemNickName());
 	}
 
 	// 마이페이지 회원정보 조회
-	@RequestMapping(value = "/readMember", method = RequestMethod.POST)
+	@RequestMapping(value = "/read", method = RequestMethod.POST)
 	public Member readMember(@RequestBody Member mem) throws Exception {
 
 		// model.addAttribute("mem", membermapper.readMember(email));
 		logger.info("조회할 이메일 : " + mem.getMemId());
 
-		return membermapper.readMember(mem.getMemId());
+		return membermapper.selectMemId(mem.getMemId());
 	}
 
 	// 마이페이지 회원정보 수정
-	@RequestMapping(value = "/modifyMember", method = RequestMethod.POST)
-	public String modifyMemberPOST(@RequestBody Member mem, RedirectAttributes rttr) throws Exception {
+	@RequestMapping(value = "/modify", method = RequestMethod.POST)
+	public String updatePOST(@RequestBody Member mem, RedirectAttributes rttr) throws Exception {
 
 		logger.info(mem.toString());
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -223,7 +222,7 @@ public class RestApiMemberController {
 
 		mem.setMemPw(hashedPassword);
 
-		membermapper.modifyMember(mem);
+		membermapper.update(mem);
 
 		rttr.addAttribute("name", mem.getMemName());
 		rttr.addFlashAttribute("msg", "SUCCESS");
@@ -235,10 +234,10 @@ public class RestApiMemberController {
 	}
 
 	// 회원탈퇴
-	@RequestMapping(value = "/deleteMember", method = RequestMethod.POST)
-	public String delete(@RequestBody Member mem) throws Exception {
+	@RequestMapping(value = "/remove", method = RequestMethod.POST)
+	public String deletePOST(@RequestBody Member mem) throws Exception {
 
-		logger.info("delete post ...........");
+		logger.info(".............delete post ...........");
 		logger.info(mem.toString());
 
 		membermapper.delete(mem.getMemId());

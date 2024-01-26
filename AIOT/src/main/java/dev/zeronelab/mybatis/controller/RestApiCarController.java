@@ -15,7 +15,7 @@ import dev.zeronelab.mybatis.mapper.CarMapper;
 import dev.zeronelab.mybatis.vo.CarVO;
 
 @RestController
-@RequestMapping("/api/car")
+@RequestMapping("/api/cars")
 public class RestApiCarController {
 
 	private static final Logger logger = LoggerFactory.getLogger(RestApiCarController.class);
@@ -25,7 +25,7 @@ public class RestApiCarController {
 
 	// 차량리스트
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public List<CarVO> carList(Model model) throws Exception {
+	public List<CarVO> selectCarList(Model model) throws Exception {
 		logger.info(". . . . . . . ./car/list");
 
 		List<CarVO> list = carmapper.selectCarList();
@@ -37,18 +37,18 @@ public class RestApiCarController {
 
 	// memId로 차량정보 조회
 	@RequestMapping(value = "/read", method = RequestMethod.POST)
-	public List<CarVO> read(@RequestBody CarVO vo) throws Exception {
+	public List<CarVO> selectMemId(@RequestBody CarVO vo) throws Exception {
 		logger.info("read post ...........");
 		logger.info("MemId: " + vo.getMemId());
 
-		List<CarVO> list = carmapper.read(vo.getMemId());
+		List<CarVO> list = carmapper.selectMemId(vo.getMemId());
 
 		return list;
 	}
 
 	// 차량등록
 	@RequestMapping(value = "/regi", method = RequestMethod.POST)
-	public String carRegi(@RequestBody CarVO vo) throws Exception {
+	public String insertCar(@RequestBody CarVO vo) throws Exception {
 
 		logger.info("regi post ...........");
 		logger.info(vo.toString());
